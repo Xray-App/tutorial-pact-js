@@ -1,0 +1,129 @@
+{
+  "consumer": {
+    "name": "e2e Consumer Example"
+  },
+  "provider": {
+    "name": "e2e Provider Example"
+  },
+  "interactions": [
+    {
+      "description": "a request for all comics",
+      "providerState": "is not authenticated",
+      "request": {
+        "method": "GET",
+        "path": "/comics/available"
+      },
+      "response": {
+        "status": 401,
+        "headers": {
+        }
+      }
+    },
+    {
+      "description": "a request for all comics",
+      "providerState": "Has some comics",
+      "request": {
+        "method": "GET",
+        "path": "/comics/available",
+        "headers": {
+          "Authorization": "Bearer 1234"
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json; charset=utf-8"
+        },
+        "body": [
+          {
+            "id": 1,
+            "title": "X-MEN",
+            "pages": 50
+          },
+          {
+            "id": 1,
+            "title": "X-MEN",
+            "pages": 50
+          }
+        ],
+        "matchingRules": {
+          "$.body": {
+            "min": 2
+          },
+          "$.body[*].*": {
+            "match": "type"
+          },
+          "$.body[*].id": {
+            "match": "type"
+          },
+          "$.body[*].title": {
+            "match": "type"
+          },
+          "$.body[*].pages": {
+            "match": "type"
+          }
+        }
+      }
+    },
+    {
+      "description": "a request for an comic with ID 1",
+      "providerState": "Has an comic with ID 1",
+      "request": {
+        "method": "GET",
+        "path": "/comics/1",
+        "headers": {
+          "Authorization": "Bearer 1234"
+        },
+        "matchingRules": {
+          "$.path": {
+            "match": "regex",
+            "regex": "\\/comics\\/[0-9]+"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json; charset=utf-8"
+        },
+        "body": {
+          "id": 1,
+          "title": "X-MEN",
+          "pages": 50
+        },
+        "matchingRules": {
+          "$.body.id": {
+            "match": "type"
+          },
+          "$.body.title": {
+            "match": "type"
+          },
+          "$.body.pages": {
+            "match": "type"
+          }
+        }
+      }
+    },
+    {
+      "description": "a request for an comic with ID 100",
+      "providerState": "Has no comics",
+      "request": {
+        "method": "GET",
+        "path": "/comics/100",
+        "headers": {
+          "Authorization": "Bearer 1234"
+        }
+      },
+      "response": {
+        "status": 404,
+        "headers": {
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "pactSpecification": {
+      "version": "2.0.0"
+    }
+  }
+}
