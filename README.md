@@ -32,7 +32,7 @@ npm run test:provider
 docker-compose up
 ```
 
-### Publish provider results to broker
+### Publish consumer results to broker
 ```bash
 npm run pact:publish
 ```
